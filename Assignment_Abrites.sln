@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Assignment_Abrites", "Assig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCP_Server", "TCP_Server\TCP_Server.csproj", "{D5EC217C-8DD2-4F43-B156-A1D298688FCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTesting", "UnitTesting\UnitTesting.csproj", "{4DFF8F3D-3974-4307-A04F-42A2B10AE3E7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{D5EC217C-8DD2-4F43-B156-A1D298688FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5EC217C-8DD2-4F43-B156-A1D298688FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5EC217C-8DD2-4F43-B156-A1D298688FCD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4DFF8F3D-3974-4307-A04F-42A2B10AE3E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4DFF8F3D-3974-4307-A04F-42A2B10AE3E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4DFF8F3D-3974-4307-A04F-42A2B10AE3E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4DFF8F3D-3974-4307-A04F-42A2B10AE3E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,21 +19,19 @@ namespace TCP_Server
                     .Evaluate(xsltExpression));
 
 
-            //Method 2
+            // Method 2 using component 
+            //var result = new DataTable().Compute(datareceived, null);
+            // int finalresult = Convert.ToInt32(result);
+            //return finalresult;
+
+
+            //Method 3
             //Using CSharpCodeProvider  
             /*
             int result = (int)new CSharpCodeProvider().CompileAssemblyFromSource(new CompilerParameters(),
             $"class X {{ public static object F() {{ return {datareceived}; }} }}").
             CompiledAssembly.GetType("X").GetMethod("F").Invoke(null, null);
             return result;
-
-           
-
-
-            /*ExpressionEvaluator expressionEvaluator = new ExpressionEvaluator();
-            int result = Convert.ToInt32(expressionEvaluator.Evaluate(datareceived));
-           
-            return result;*/
 
 
 
@@ -54,9 +52,6 @@ namespace TCP_Server
                 result += c;
             }
             return result;
-
-
-
 
             // Example 2
             int num = 0;
@@ -81,14 +76,6 @@ namespace TCP_Server
                 }
 
             }*/
-
-
-
-            // Method 3 using component 
-            //var result = new DataTable().Compute(datareceived, null);
-           // int finalresult = Convert.ToInt32(result);
-            //return finalresult;
-
         }
     }
 }

@@ -2,24 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
 namespace TCP_Server
 {
     public class ExpressionEvaluator
-    {
-        public double Evaluate(string expression)
+    {   
+        private int result = 0;
+        public int Evaluate(string expression)
         {
-            this.CalculateSkoba(expression,0);
+            int result = 0;
+            //this.CalculateSkoba(expression,0);   
+            return this.CalculateSimpleExpression(expression);
+            
+        }
+
+
+
+        public int CalculateDifficultExpression(string expression)
+        {
             // Create operand and operator stacks
             var operandStack = new Stack<double>();
             var operatorStack = new Stack<char>();
-
-
-            
-
-
             // Create a list of tokens (numbers and operators)
             // var tokens = Tokenize(expression);
             var tokens = expression.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -27,7 +33,7 @@ namespace TCP_Server
             // Process the tokens
             //foreach(char token in expression)
             foreach (var token in tokens)
-           // for(int i=0; i<expression.Length; i++)
+                            // for(int i=0; i<expression.Length; i++)
             {
                 //var token = expression[i];
                 if (IsNumber(token))
@@ -39,24 +45,36 @@ namespace TCP_Server
                 {
                     // If the token is an operator, push it onto the operator stack
                     // after removing any operators with higher or equal precedence
-                    while (operatorStack.Count > 0 && HasHigherOrEqualPrecedence(operatorStack.Peek(), token[0]))
+                    while (operatorStack.Count > 0 /*&& HasHigherOrEqualPrecedence(operatorStack.Peek(), token[0])*/)
                     {
-                        operandStack.Push(PerformOperation(operatorStack.Pop(), operandStack.Pop(), operandStack.Pop()));
+                        result = Convert.ToInt32(this.PerformOperation(operatorStack.Pop(), operandStack.Pop(), operandStack.Pop()));
                     }
                     operatorStack.Push(token[0]);
                 }
             }
-
+            return result;
             // When the input expression has been completely processed,
             // append any remaining operators to the result list
-            while (operatorStack.Count > 0)
-            {
-                operandStack.Push(PerformOperation(operatorStack.Pop(), operandStack.Pop(), operandStack.Pop()));
-            }
+            /* while (operatorStack.Count > 0)
+             {
+                 operandStack.Push(PerformOperation(operatorStack.Pop(), operandStack.Pop(), operandStack.Pop()));
+             }*/
 
             // The final result should be the only value on the operand stack
-            return operandStack.Peek();
+            //return operandStack.Peek();
+
         }
+
+
+
+
+
+
+
+
+
+
+        //General methods for checking if char is number or operator and performing operations
 
         private static bool IsNumber(string token)
         {
@@ -85,7 +103,7 @@ namespace TCP_Server
             return op1 == '+' || op1 == '-' && op2 == '+' || op2 == '-';
         }
 
-        private static double PerformOperation(char operation, double operand2, double operand1)
+        private double PerformOperation(char operation, double operand2, double operand1)
         {
             // Perform the specified operation on the operands
             switch (operation)
@@ -102,10 +120,18 @@ namespace TCP_Server
                     throw new ArgumentException("Invalid operator");
             }
         }
+
+
+
+
+
+
+        /// <summary>
+        /// Used to take the expression inside the parentheses, calculate it
+        /// Still in development mode It should replace the innerexpression with the final resul 
         private static Stack<double> numbers = new Stack<double>();
         private static Stack<string> operators = new Stack<string>();
         private int counter = 0;
-        private int result = 0;
         void CalculateSkoba(string expression,int count)
         {  
             var firstOpen = expression.IndexOf('(');
@@ -116,6 +142,7 @@ namespace TCP_Server
                 CalculateSkoba(innerExpression,++count);
                 //innerExpression.ToString();
                 innerExpression = expression.Replace(Convert.ToChar(innerExpression), Convert.ToChar(result));
+
                 //innerExpression.Remove(0, counter-1);
                 //innerExpression.Insert(0, Convert.ToString(result));
                 //innerExpression= innerExpression.ToString();
@@ -133,7 +160,11 @@ namespace TCP_Server
                     }
                     else
                     {
-                        operators.Push(b);
+                        if (IsOperator(b))
+                        {
+                            operators.Push(b);
+                        }
+                        
                     }
                 }
                 int num2 =Convert.ToInt32(numbers.Pop());
@@ -142,8 +173,55 @@ namespace TCP_Server
                 char op2 = Convert.ToChar(temp_op);
                 double temp_result = PerformOperation(op2, num2, num1);
                 result = Convert.ToInt32(temp_result);
-                
             }
         }
-    }
+
+
+        /// </summary>
+
+
+
+
+
+        /// <summary>
+        /// Used to calculate expression with 2 numbers and operator
+        /// It can calucalate equations such as 1+1 or 1 + 1
+        /// have issues when it has user error such as 1 +1. In simple words, the numbers and operators should have the same whitespace pattern 
+        public int CalculateSimpleExpression(string expression)
+        {
+            bool whitespace;
+            whitespace = expression.Any(Char.IsWhiteSpace);
+            if (!whitespace)
+            {
+                var newValue = Regex.Replace(expression, "([0-9])([+^/^*^-])", "$1 $2 ");
+                expression = newValue;
+            }
+            var a = expression.Split(' ').ToList();
+            foreach (var b in a)
+            {
+                var isNumber = double.TryParse(b, out double number);
+                if (isNumber)
+                {
+                    numbers.Push((double)number);
+                }
+                else
+                {
+                    if (IsOperator(b))
+                    {
+                        
+                        operators.Push(b);
+                    }
+                }
+            }
+            int num2 = Convert.ToInt32(numbers.Pop());
+            int num1 = Convert.ToInt32(numbers.Pop());
+            string temp_op = Convert.ToString(operators.Pop());
+            char op2 = Convert.ToChar(temp_op);
+            double temp_result = PerformOperation(op2, num2, num1);
+            result= result + Convert.ToInt32(temp_result);
+            return result;
+            }
+        }
+         /// </summary>
+
 }

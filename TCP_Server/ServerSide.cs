@@ -81,8 +81,8 @@ namespace TCP_Server
         {
             string exampledata = "2+3";
             string exampledata2 = "1 + (2 * 3 - (4 / 2))";
-            int testresult = calculator.Calculate(exampledata2);
-            //int testresult = Convert.ToInt32(exev.Evaluate(exampledata2));
+            //int testresult = calculator.Calculate(exampledata2);
+            int testresult = Convert.ToInt32(exev.Evaluate(exampledata));
             if (testresult != 5)
             {
                 throw new Exception();
